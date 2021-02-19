@@ -3,6 +3,7 @@
     "target": "ESNext",
     "module": "UMD",
     "moduleResolution": "Node",
-    "strict": true
+    "strict": true,
+    "jsx": "react-jsx"
   }
 }
