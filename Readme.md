@@ -1,3 +1,3 @@
 # H-Tsx
 
-hyper-text ❤️ tsx 
+hyperscript ❤️ tsx 
