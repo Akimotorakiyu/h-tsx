@@ -100,7 +100,7 @@ export function createElement<K extends keyof HTMLElementTagNameMap>(
               : item;
           })
           .flat()
-          .map(kebabCase)
+          // .map(kebabCase)
           .join(" ");
       }
       // 处理 style
