@@ -4,8 +4,12 @@
   "main": "index.js",
   "author": "湫曗 <autumnsilverleaves@gmail.com>",
   "license": "MIT",
+  "scripts": {
+    "serve": "vite"
+  },
   "devDependencies": {
     "ts-node": "^9.1.1",
-    "typescript": "^4.1.5"
+    "typescript": "^4.1.5",
+    "vite": "^2.0.1"
   }
 }

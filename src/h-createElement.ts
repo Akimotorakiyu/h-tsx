@@ -1,16 +1,4 @@
-type Attrs<K extends keyof HTMLElementTagNameMap> = Partial<
-  {
-    [key in keyof HTMLElementTagNameMap[K]]:
-      | Partial<HTMLElementTagNameMap[K][key]>
-      | (() => Partial<HTMLElementTagNameMap[K][key]>);
-  } & {
-    class:
-      | string
-      | string[]
-      | { [key: string]: boolean }
-      | (() => string | string[] | { [key: string]: boolean });
-  }
->;
+type Attrs<K extends keyof HTMLElementTagNameMap> = JsxHTMLElementTagNameMap[K];
 
 type Children = (Node | string)[];
 
@@ -73,21 +61,15 @@ export function createElement<K extends keyof HTMLElementTagNameMap>(
     // 添加事件监听器
     // 支持事件数组
     if (key.startsWith("on")) {
-      let tempCb: (() => void)[];
-
-      if (Array.isArray(value)) {
-        tempCb = value;
+      if (typeof value === "function") {
+        element.addEventListener(
+          key.slice(2).toLocaleLowerCase(),
+          value as () => void
+        );
       } else {
-        tempCb = [value];
+        console.error("incorrect event listener", tag, key, value);
+        throw new Error("incorrect event listener");
       }
-
-      tempCb.forEach((cb) => {
-        if (typeof cb !== "function") {
-          console.error("incorrect event listener", tag, key, value);
-          throw new Error("incorrect event listener");
-        }
-        element.addEventListener(key.slice(2).toLocaleLowerCase(), cb);
-      });
     }
 
     // 防止修改原生的函数

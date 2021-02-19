@@ -4,6 +4,7 @@
     "module": "UMD",
     "moduleResolution": "Node",
     "strict": true,
-    "jsx": "react-jsx"
+    "jsx": "react",
+    "jsxFactory": "htsx.createElement"
   }
 }
