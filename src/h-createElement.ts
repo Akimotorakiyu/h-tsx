@@ -90,9 +90,8 @@ export function createElement<K extends keyof HTMLElementTagNameMap>(
         realValue = [tempValue]
           .flat()
           .map((item) => {
-            return typeof tempValue === "object"
-              ? convertObjectToAttrStringArray(item)
-              : item;
+            const isObject = typeof item === "object";
+            return isObject ? convertObjectToAttrStringArray(item) : item;
           })
           .flat()
           .join(" ");

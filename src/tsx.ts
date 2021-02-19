@@ -1,3 +1,8 @@
+declare type ClassType =
+  | string
+  | { [key: string]: boolean }
+  | (string | { [key: string]: boolean })[];
+
 declare type JsxHTMLElementTagNameMap = {
   [tag in keyof HTMLElementTagNameMap]: Partial<
     {
@@ -5,11 +10,7 @@ declare type JsxHTMLElementTagNameMap = {
         HTMLElementTagNameMap[tag][key]
       >;
     } & {
-      class:
-        | string
-        | string[]
-        | { [key: string]: boolean }
-        | { [key: string]: boolean }[];
+      class: ClassType;
     }
   >;
 };
