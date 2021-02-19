@@ -7,9 +7,9 @@ function Greeting(props: { name: string }) {
           hello: false,
           world: true,
         },
-        "xxxsssssss",
+        "xxxSssssss",
       ]}
-      style={{ width: "200px" }}
+      style={{ minWidth: "200px" }}
     >
       {props.name + "hello wrold"}
     </div>

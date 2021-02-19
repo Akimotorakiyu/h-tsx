@@ -38,15 +38,20 @@ export function h<K extends keyof HTMLElementTagNameMap>(
   }
 }
 
+// todo: need more safe impl
+function kebabCase(str: string) {
+  return str.replace(/([A-Z])/g, function ($1) {
+    return "-" + $1.toLocaleLowerCase();
+  });
+}
+
 function convertObjectToAttrStringArray(o: Object) {
   return Object.entries(o)
     .filter(([v, should]) => {
       return Boolean(should);
     })
     .map(([v]) => {
-      return `${v.replace(/([A-Z])/g, function ($1) {
-        return "-" + $1.toLocaleLowerCase();
-      })}`;
+      return v;
     });
 }
 
@@ -89,20 +94,20 @@ export function createElement<K extends keyof HTMLElementTagNameMap>(
       if (key === "class" || key === "className") {
         realValue = [tempValue]
           .flat()
-          .map((item) => {
-            const isObject = typeof item === "object";
-            return isObject ? convertObjectToAttrStringArray(item) : item;
+          .map((item: ClassType) => {
+            return typeof item === "object"
+              ? convertObjectToAttrStringArray(item)
+              : item;
           })
           .flat()
+          .map(kebabCase)
           .join(" ");
       }
       // 处理 style
       else if (key === "style" && typeof tempValue === "object") {
         realValue = Object.entries(tempValue)
           .map(([key, value]) => {
-            return `${key.replace(/([A-Z])/g, function ($1) {
-              return "-" + $1.toLocaleLowerCase();
-            })}:${value}`;
+            return `${kebabCase(key)}:${value}`;
           })
           .join(";");
       } else {
