@@ -5,6 +5,7 @@
     "moduleResolution": "Node",
     "strict": true,
     "jsx": "react",
-    "jsxFactory": "htsx.createElement"
+    "jsxFactory": "htsx.createElement",
+    "jsxFragmentFactory": "htsx.Fragment"
   }
 }

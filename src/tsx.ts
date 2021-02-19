@@ -17,7 +17,7 @@ declare type JsxHTMLElementTagNameMap = {
 declare type JsxIntrinsicElements = JsxHTMLElementTagNameMap;
 
 declare namespace JSX {
-  type Element = HTMLElement;
+  type Element = HTMLElement | DocumentFragment;
   type IntrinsicElements = JsxIntrinsicElements;
 }
 
@@ -37,6 +37,7 @@ declare interface HTSX {
     props: JSX.IntrinsicElements[Tag],
     ...children: (JSX.Element | string)[]
   ): JSX.Element;
+  Fragment(props: null, children: JSX.Element[]): DocumentFragment;
 }
 
 declare const htsx: HTSX;

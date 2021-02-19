@@ -15,6 +15,19 @@ export const htsx = <HTSX>{
       );
     }
   },
+  Fragment(props: null, children: JSX.Element[]) {
+    const fragment = new DocumentFragment();
+    children
+      .map((child) => {
+        return typeof child === "string"
+          ? document.createTextNode(child)
+          : child;
+      })
+      .forEach((child) => {
+        fragment.appendChild(child);
+      });
+    return fragment;
+  },
 };
 
 Reflect.set(window, "htsx", htsx);
