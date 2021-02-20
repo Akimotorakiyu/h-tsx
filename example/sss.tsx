@@ -16,9 +16,21 @@ function Greeting(props: { name: string }) {
   );
 }
 
+class User {
+  constructor(public props: { name: string }, children: []) {}
+  render() {
+    return (
+      <>
+        <div>臭哥哥{this.props.name}</div>
+      </>
+    );
+  }
+}
+
 export function Welcome() {
   return (
     <>
+      <User name="湫曗"></User>
       <Greeting name="小朋友">aaaa</Greeting>
       小朋友
       <svg viewBox="0 0 770.65 1125">

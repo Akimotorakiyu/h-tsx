@@ -22,12 +22,21 @@ declare type JsxIntrinsicElements = JsxElementTagNameMap;
 declare namespace JSX {
   type Element = HTMLElement | DocumentFragment | SVGElement;
   type IntrinsicElements = JsxIntrinsicElements;
+
+  interface ElementClass {
+    render(): Element;
+  }
 }
 
 declare type JsxFunctionComponent<P> = (
   props: P,
   children: (JSX.Element | string)[]
 ) => JSX.Element;
+
+declare interface JSXClassComponent<P> {
+  new (props: P, children: (JSX.Element | string)[]): JSXClassComponent<P>;
+  render(): JSX.Element;
+}
 
 declare interface HTSX {
   createElement<P>(
