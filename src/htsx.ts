@@ -8,11 +8,11 @@ export const htsx = <HTSX>{
     if (typeof tag === "function") {
       return tag(props as P, children);
     } else {
-      return createElement(
+      return (createElement(
         tag,
         (props as JSX.IntrinsicElements[Tag]) || {},
         children
-      );
+      ) as unknown) as JSX.Element;
     }
   },
   Fragment(props: null, children: JSX.Element[]) {

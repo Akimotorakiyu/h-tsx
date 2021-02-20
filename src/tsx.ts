@@ -1,21 +1,26 @@
 declare type ClassType = string | { [key: string]: boolean };
 
-declare type JsxHTMLElementTagNameMap = {
-  [tag in keyof HTMLElementTagNameMap]: Partial<
+type TagNameMap = HTMLElementTagNameMap &
+  SVGElementTagNameMap & {
+    path: { d: string; fill: string };
+    // svg: { fill: string; width: string; height: string; viewBox: string };
+  };
+
+declare type JsxElementTagNameMap = {
+  [tag in keyof TagNameMap]: Partial<
     {
-      [key in keyof HTMLElementTagNameMap[tag]]: Partial<
-        HTMLElementTagNameMap[tag][key]
-      >;
+      [key in keyof TagNameMap[tag]]: Partial<TagNameMap[tag][key]> | string;
     } & {
       class: ClassType | ClassType[];
+      style: Partial<TagNameMap[tag]["style"]>;
     }
   >;
 };
 
-declare type JsxIntrinsicElements = JsxHTMLElementTagNameMap;
+declare type JsxIntrinsicElements = JsxElementTagNameMap;
 
 declare namespace JSX {
-  type Element = HTMLElement | DocumentFragment;
+  type Element = HTMLElement | DocumentFragment | SVGElement;
   type IntrinsicElements = JsxIntrinsicElements;
 }
 

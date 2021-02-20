@@ -1,30 +1,32 @@
-type Attrs<K extends keyof HTMLElementTagNameMap> = JsxHTMLElementTagNameMap[K];
+import { isSVGTag } from "./tagMap";
+
+type Attrs<K extends keyof JsxElementTagNameMap> = JsxElementTagNameMap[K];
 
 type Children = (Node | string)[];
 
-export function h<K extends keyof HTMLElementTagNameMap>(
+export function h<K extends keyof JsxElementTagNameMap>(
   tag: K
-): HTMLElementTagNameMap[K];
+): JsxElementTagNameMap[K];
 
-export function h<K extends keyof HTMLElementTagNameMap>(
+export function h<K extends keyof JsxElementTagNameMap>(
   tag: K,
-  attrs: Attrs<K>
-): HTMLElementTagNameMap[K];
+  attrs: JsxElementTagNameMap[K]
+): JsxElementTagNameMap[K];
 
-export function h<K extends keyof HTMLElementTagNameMap>(
+export function h<K extends keyof JsxElementTagNameMap>(
   tag: K,
   childNodes: Children
-): HTMLElementTagNameMap[K];
+): JsxElementTagNameMap[K];
 
-export function h<K extends keyof HTMLElementTagNameMap>(
+export function h<K extends keyof JsxElementTagNameMap>(
   tag: K,
-  attrs: Attrs<K>,
+  attrs: JsxElementTagNameMap[K],
   childNodes: Children
-): HTMLElementTagNameMap[K];
+): JsxElementTagNameMap[K];
 
-export function h<K extends keyof HTMLElementTagNameMap>(
+export function h<K extends keyof JsxElementTagNameMap>(
   tag: K,
-  p1?: Attrs<K> | Children,
+  p1?: JsxElementTagNameMap[K] | Children,
   p2?: Children
 ) {
   if (p1 && p2) {
@@ -55,12 +57,14 @@ function convertObjectToAttrStringArray(o: Object) {
     });
 }
 
-export function createElement<K extends keyof HTMLElementTagNameMap>(
+export function createElement<K extends keyof JsxElementTagNameMap>(
   tag: K,
-  attrs: Attrs<K> = {},
+  attrs: JsxElementTagNameMap[K] = {},
   childNodes: Children = []
-): HTMLElementTagNameMap[K] {
-  const element = document.createElement(tag);
+): JsxElementTagNameMap[K] {
+  const element = isSVGTag(tag)
+    ? document.createElementNS("http://www.w3.org/2000/svg", tag)
+    : document.createElement(tag);
 
   Object.entries(attrs).forEach(([key, value]) => {
     // 添加事件监听器
@@ -79,7 +83,7 @@ export function createElement<K extends keyof HTMLElementTagNameMap>(
 
     // 防止修改原生的函数
     else if (
-      typeof element[key as keyof HTMLElementTagNameMap[K]] === "function"
+      typeof element[key as keyof (HTMLElement | SVGAElement)] === "function"
     ) {
       console.error("incorrect key", tag);
       throw new Error("incorrect key");
@@ -87,7 +91,7 @@ export function createElement<K extends keyof HTMLElementTagNameMap>(
 
     // 设置普通属性
     else {
-      const tempValue: any = typeof value === "function" ? value() : value;
+      const tempValue: any = value;
       let realValue: string;
 
       // 处理 class
@@ -127,5 +131,6 @@ export function createElement<K extends keyof HTMLElementTagNameMap>(
     .forEach((child) => {
       element.appendChild(child);
     });
-  return element;
+
+  return (element as unknown) as JsxElementTagNameMap[K];
 }
