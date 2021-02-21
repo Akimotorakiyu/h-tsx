@@ -1,14 +1,14 @@
 # H-Tsx
 
-hyperscript ❤️ tsx 
+hyperscript ❤️ tsx
 
-## 
+##
 
 - html
 - svg
 - function component
 - class component
 
-## 
+##
 
 - provide-inject
