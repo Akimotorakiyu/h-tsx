@@ -15,7 +15,6 @@ let currentCtx: Ctx | null = null;
 
 export function getCurrentCtx() {
   if (!currentCtx) {
-    console.log("create root ctx");
     currentCtx = {
       provides: Object.create(null),
       tag: null,

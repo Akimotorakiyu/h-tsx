@@ -1,3 +1,4 @@
+import "./app.css";
 import "../src/htsx";
 import { provide, inject, createProvideInject } from "../src/provide-inject";
 import { HappyIcon } from "./happyIcon";
@@ -18,7 +19,7 @@ function Greeting(
           hello: false,
           world: true,
         },
-        "xxxSssssss",
+        "px py bg-gray-300 rounded",
       ]}
       style={{ minWidth: "200px" }}
     >
@@ -37,7 +38,8 @@ class User {
     }
   ) {}
   render() {
-    console.log(this.ctx);
+    const greeting = hhh.inject();
+    console.log(this.ctx, greeting);
     return (
       <>
         <div>臭哥哥{this.props.name}</div>
