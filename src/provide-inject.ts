@@ -35,5 +35,3 @@ export class ProvideInject<D, K extends KeyType = symbol> {
     return inject<D>(this._key);
   }
 }
-
-const b = new ProvideInject<{}>();
