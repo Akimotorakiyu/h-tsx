@@ -1,15 +1,15 @@
 {
   "name": "h-tsx",
   "version": "1.0.0",
-  "main": "src/index.ts",
+  "main": "index.js",
+  "repository": "https://github.com/Akimotorakiyu/h-tsx.git",
   "author": "湫曗 <autumnsilverleaves@gmail.com>",
   "license": "MIT",
+  "private": true,
   "scripts": {
-    "serve": "vite"
+    "serve": "yarn workspace h-tsx serve"
   },
-  "devDependencies": {
-    "ts-node": "^9.1.1",
-    "typescript": "^4.1.5",
-    "vite": "^2.0.1"
-  }
+  "workspaces": [
+    "./packages/*"
+  ]
 }
