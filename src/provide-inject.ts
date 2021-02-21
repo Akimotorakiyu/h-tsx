@@ -2,7 +2,6 @@ import { getCurrentCtx, KeyType } from "./htsx";
 
 export function provide<T>(key: KeyType, data: T) {
   const ctx = getCurrentCtx();
-  console.log(ctx.provides);
   return Reflect.set(ctx.provides, key, data);
 }
 

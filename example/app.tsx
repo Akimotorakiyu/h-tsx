@@ -1,6 +1,5 @@
 import "./app.css";
-import "../src/htsx";
-import { provide, inject, createProvideInject } from "../src/provide-inject";
+import { provide, inject, createProvideInject } from "../src/index";
 import { HappyIcon } from "./happyIcon";
 
 const hhh = createProvideInject<string>();
