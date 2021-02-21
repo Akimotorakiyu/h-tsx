@@ -7,9 +7,9 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "serve": "yarn workspace h-tsx serve"
+    "serve": "yarn workspace example serve"
   },
   "workspaces": [
-    "./packages/*"
+    "packages/*"
   ]
 }

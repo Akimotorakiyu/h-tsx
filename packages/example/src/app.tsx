@@ -1,5 +1,5 @@
 import "./app.css";
-import { provide, inject, createProvideInject } from "../src/index";
+import { provide, inject, createProvideInject } from "h-tsx";
 import { HappyIcon } from "./happyIcon";
 
 const hhh = createProvideInject<string>();
