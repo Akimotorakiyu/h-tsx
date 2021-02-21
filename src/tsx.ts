@@ -30,11 +30,22 @@ declare namespace JSX {
 
 declare type JsxFunctionComponent<P> = (
   props: P,
-  children: (JSX.Element | string)[]
+  children: (JSX.Element | string)[],
+  ctx: {
+    tag: JsxFunctionComponent<P>;
+    provide: Record<string, any>;
+  }
 ) => JSX.Element;
 
 declare interface JSXClassComponent<P> {
-  new (props: P, children: (JSX.Element | string)[]): JSXClassComponent<P>;
+  new (
+    props: P,
+    children: (JSX.Element | string)[],
+    ctx: {
+      tag: JSXClassComponent<P>;
+      provide: Record<string, any>;
+    }
+  ): JSXClassComponent<P>;
   render(): JSX.Element;
 }
 

@@ -1,4 +1,4 @@
-import { Welcome } from "./example/sss";
+import { Welcome } from "./example/app";
 
 const element = Welcome();
 
