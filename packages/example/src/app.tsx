@@ -18,15 +18,7 @@ function Greeting(
 ) {
   const msg = inject("hhh");
   const greeting = hhh.inject();
-  onConnected(function happy() {
-    console.log("Greeting onConnected!");
-  });
-  onResize(function happy() {
-    console.log("Greeting onResize!");
-  });
-  onDisonnected(function happy() {
-    console.log("Greeting onDisonnected!");
-  });
+
   return (
     <div
       class={[
@@ -55,8 +47,21 @@ class User {
   render() {
     const greeting = hhh.inject();
     console.log(this.ctx, greeting);
+
+    onConnected(function happy() {
+      console.log("Greeting onConnected!");
+    });
+    onResize(function happy() {
+      console.log("Greeting onResize!");
+    });
+    onDisonnected(function happy() {
+      console.log("Greeting onDisonnected!");
+    });
     return (
       <>
+        <div>臭哥哥{this.props.name}</div>
+        <div>臭哥哥{this.props.name}</div>
+        <div>臭哥哥{this.props.name}</div>
         <div>臭哥哥{this.props.name}</div>
       </>
     );

@@ -8,10 +8,10 @@ export type KeyType = number | symbol | string;
 export interface Ctx {
   provides: Record<KeyType, unknown>;
   tag: JsxFunctionComponent<unknown> | JSXClassComponent<unknown> | null;
-  onResize: ((target: Element) => void)[];
+  onResize: ((target: Element[]) => void)[];
   isConnected: boolean;
-  onConnected: ((target: Element) => void)[];
-  onDisonnected: ((target: Element) => void)[];
+  onConnected: ((target: Element[]) => void)[];
+  onDisonnected: ((target: Element[]) => void)[];
 }
 
 let ctxStack: Ctx[] = [];
@@ -31,40 +31,47 @@ export function getCurrentCtx() {
   return currentCtx;
 }
 
-function createLifecycleHandler(target: Element, ctx: Ctx) {
+function createLifecycleHandler(targetList: Element[], ctx: Ctx) {
   const observer = new ResizeObserver((resizeObserverEntryList) => {
-    // console.log("ResizeObserverEntry", resizeObserverEntryList);
-    resizeObserverEntryList.forEach((resizeObserverEntry) => {
-      const target = resizeObserverEntry.target;
+    // console.log(
+    //   "ResizeObserverEntry",
+    //   (ctx.tag as any).name,
+    //   resizeObserverEntryList
+    // );
 
-      if (target.isConnected !== ctx.isConnected) {
-        if (target.isConnected) {
-          ctx.isConnected = target.isConnected;
-          ctx.onConnected.forEach((fn) => {
-            fn(target);
-          });
-          ctx.onResize.forEach((fn) => {
-            fn(target);
-          });
-        } else {
-          ctx.onResize.forEach((fn) => {
-            fn(target);
-          });
-          ctx.isConnected = target.isConnected;
-          ctx.onDisonnected.forEach((fn) => {
-            fn(target);
-          });
-        }
+    const isConnected = targetList.some((target) => {
+      return target.isConnected;
+    });
+
+    if (isConnected !== ctx.isConnected) {
+      if (isConnected) {
+        ctx.isConnected = isConnected;
+        ctx.onConnected.forEach((fn) => {
+          fn(targetList);
+        });
+        ctx.onResize.forEach((fn) => {
+          fn(targetList);
+        });
       } else {
         ctx.onResize.forEach((fn) => {
-          fn(target);
+          fn(targetList);
+        });
+        ctx.isConnected = isConnected;
+        ctx.onDisonnected.forEach((fn) => {
+          fn(targetList);
         });
       }
-    });
+    } else {
+      ctx.onResize.forEach((fn) => {
+        fn(targetList);
+      });
+    }
   });
 
-  observer.observe(target, {
-    box: "border-box",
+  targetList.forEach((target) => {
+    observer.observe(target, {
+      box: "border-box",
+    });
   });
 }
 
@@ -110,8 +117,18 @@ export const htsx = <HTSX>{
       // not nesscessary
       // Reflect.set(element, "ctx", currentCtx);
       if (element instanceof DocumentFragment) {
+        createLifecycleHandler(
+          [...element.childNodes]
+            .filter((cn) => {
+              return cn instanceof Element;
+            })
+            .map((ce) => {
+              return ce as Element;
+            }),
+          currentCtx!
+        );
       } else {
-        createLifecycleHandler(element, currentCtx!);
+        createLifecycleHandler([element], currentCtx!);
       }
       currentCtx = ctxStack.pop() || null;
     }
