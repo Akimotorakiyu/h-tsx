@@ -4,3 +4,4 @@ export * from "./provide-inject";
 export * from "./h-createElement";
 export * from "./lifecycleHook";
 export * from "./defineComponent";
+export * from "./updater";

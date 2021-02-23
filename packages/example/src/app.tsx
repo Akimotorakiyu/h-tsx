@@ -6,6 +6,7 @@ import {
   onConnected,
   onResize,
   onDisonnected,
+  createElementWithUpdater,
 } from "h-tsx";
 import { HappyIcon } from "./happyIcon";
 
@@ -19,33 +20,28 @@ function Greeting(
   const msg = inject("hhh");
   const greeting = hhh.inject();
 
-  let el: JSX.Element;
-
-  function update() {
-    const node = (
-      <Greeting name={`"湫曗aaaaaaUpdated"${Date().valueOf()}`}></Greeting>
+  const { updater, element, getElement } = createElementWithUpdater(() => {
+    return (
+      <div
+        class={[
+          {
+            hello: false,
+            world: true,
+          },
+          "px py bg-gray-300 rounded",
+        ]}
+        style={{ minWidth: "200px" }}
+      >
+        {props.name + "hello wrold" + msg + greeting + `${Date().valueOf()}`}
+      </div>
     );
-    (el as ChildNode).replaceWith(node);
-  }
+  });
 
-  setTimeout(() => {
-    update();
+  setInterval(() => {
+    updater();
   }, 1000);
 
-  return (el = (
-    <div
-      class={[
-        {
-          hello: false,
-          world: true,
-        },
-        "px py bg-gray-300 rounded",
-      ]}
-      style={{ minWidth: "200px" }}
-    >
-      {props.name + "hello wrold" + msg + greeting}
-    </div>
-  ));
+  return element;
 }
 
 class User {
@@ -72,34 +68,22 @@ class User {
       console.log("Greeting onDisonnected!");
     });
 
-    setTimeout(() => {
-      this.update();
+    const { updater, element, getElement } = createElementWithUpdater(() => {
+      return (
+        <>
+          <div>臭哥哥{this.props.name + `${Date().valueOf()}`}</div>
+          <div>臭哥哥{this.props.name + `${Date().valueOf()}`}</div>
+          <div>臭哥哥{this.props.name + `${Date().valueOf()}`}</div>
+          <div>臭哥哥{this.props.name + `${Date().valueOf()}`}</div>
+        </>
+      );
+    });
+
+    setInterval(() => {
+      updater();
     }, 1000);
 
-    const node = (
-      <>
-        <div>臭哥哥{this.props.name}</div>
-        <div>臭哥哥{this.props.name}</div>
-        <div>臭哥哥{this.props.name}</div>
-        <div>臭哥哥{this.props.name}</div>
-      </>
-    );
-
-    this.el = [...node.childNodes] as JSX.Element[];
-
-    return node;
-  }
-
-  update() {
-    const node = <User name={`${Date().valueOf()}`}></User>;
-
-    this.el.forEach((el, index) => {
-      if (index === this.el.length - 1) {
-        (el as ChildNode).replaceWith(node);
-      } else {
-        (el as ChildNode).remove();
-      }
-    });
+    return element;
   }
 }
 
