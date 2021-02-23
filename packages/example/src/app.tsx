@@ -1,5 +1,12 @@
 import "./app.css";
-import { provide, inject, createProvideInject } from "h-tsx";
+import {
+  provide,
+  inject,
+  createProvideInject,
+  onConnected,
+  onResize,
+  onDisonnected,
+} from "h-tsx";
 import { HappyIcon } from "./happyIcon";
 
 const hhh = createProvideInject<string>();
@@ -11,6 +18,15 @@ function Greeting(
 ) {
   const msg = inject("hhh");
   const greeting = hhh.inject();
+  onConnected(function happy() {
+    console.log("Greeting onConnected!");
+  });
+  onResize(function happy() {
+    console.log("Greeting onResize!");
+  });
+  onDisonnected(function happy() {
+    console.log("Greeting onDisonnected!");
+  });
   return (
     <div
       class={[
@@ -47,15 +63,20 @@ class User {
   }
 }
 
-export function Welcome() {
+export function Welcome(...args: unknown[]) {
+  console.log("root", ...args);
   provide("hhh", "provide-inject");
   hhh.provide("你好啊");
   return (
     <>
+      <Greeting name="臭哥哥"></Greeting>
       <User name="湫曗"></User>
-      <Greeting name="小朋友">aaaa</Greeting>
       小朋友
       <HappyIcon></HappyIcon>
     </>
   );
 }
+
+const element = <Welcome />;
+
+document.body.appendChild(element);

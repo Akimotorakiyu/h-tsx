@@ -8,6 +8,10 @@ export type KeyType = number | symbol | string;
 interface Ctx {
   provides: Record<KeyType, unknown>;
   tag: JsxFunctionComponent<unknown> | JSXClassComponent<unknown> | null;
+  onResize: ((target: Element) => void)[];
+  isConnected: boolean;
+  onConnected: ((target: Element) => void)[];
+  onDisonnected: ((target: Element) => void)[];
 }
 
 let ctxStack: Ctx[] = [];
@@ -18,9 +22,50 @@ export function getCurrentCtx() {
     currentCtx = {
       provides: Object.create(null),
       tag: null,
+      onResize: [],
+      isConnected: false,
+      onConnected: [],
+      onDisonnected: [],
     };
   }
   return currentCtx;
+}
+
+function createLifecycleHandler(target: Element, ctx: Ctx) {
+  const observer = new ResizeObserver((resizeObserverEntryList) => {
+    // console.log("ResizeObserverEntry", resizeObserverEntryList);
+    resizeObserverEntryList.forEach((resizeObserverEntry) => {
+      const target = resizeObserverEntry.target;
+
+      if (target.isConnected !== ctx.isConnected) {
+        if (target.isConnected) {
+          ctx.isConnected = target.isConnected;
+          ctx.onConnected.forEach((fn) => {
+            fn(target);
+          });
+          ctx.onResize.forEach((fn) => {
+            fn(target);
+          });
+        } else {
+          ctx.onResize.forEach((fn) => {
+            fn(target);
+          });
+          ctx.isConnected = target.isConnected;
+          ctx.onDisonnected.forEach((fn) => {
+            fn(target);
+          });
+        }
+      } else {
+        ctx.onResize.forEach((fn) => {
+          fn(target);
+        });
+      }
+    });
+  });
+
+  observer.observe(target, {
+    box: "border-box",
+  });
 }
 
 export const htsx = <HTSX>{
@@ -34,6 +79,10 @@ export const htsx = <HTSX>{
       currentCtx = {
         provides: Object.create(currentCtx?.provides || null),
         tag: tag as JsxFunctionComponent<unknown> | JSXClassComponent<unknown>,
+        onResize: [],
+        isConnected: false,
+        onConnected: [],
+        onDisonnected: [],
       };
     }
 
@@ -58,6 +107,12 @@ export const htsx = <HTSX>{
     }
 
     if (typeof tag === "function") {
+      // not nesscessary
+      // Reflect.set(element, "ctx", currentCtx);
+      if (element instanceof DocumentFragment) {
+      } else {
+        createLifecycleHandler(element, currentCtx!);
+      }
       currentCtx = ctxStack.pop() || null;
     }
 

@@ -1,5 +1,1 @@
-import { Welcome } from "./app";
-
-const element = Welcome();
-
-document.body.appendChild(element);
+import "./app";

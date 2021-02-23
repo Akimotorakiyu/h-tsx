@@ -12,3 +12,9 @@ hyperscript ❤️ tsx
 ##
 
 - provide-inject
+
+##
+
+- onConnected
+- onDisonnected
+- onResize
