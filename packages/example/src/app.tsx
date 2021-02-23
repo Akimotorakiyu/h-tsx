@@ -19,7 +19,20 @@ function Greeting(
   const msg = inject("hhh");
   const greeting = hhh.inject();
 
-  return (
+  let el: JSX.Element;
+
+  function update() {
+    const node = (
+      <Greeting name={`"湫曗aaaaaaUpdated"${Date().valueOf()}`}></Greeting>
+    );
+    (el as ChildNode).replaceWith(node);
+  }
+
+  setTimeout(() => {
+    update();
+  }, 1000);
+
+  return (el = (
     <div
       class={[
         {
@@ -32,10 +45,11 @@ function Greeting(
     >
       {props.name + "hello wrold" + msg + greeting}
     </div>
-  );
+  ));
 }
 
 class User {
+  el: JSX.Element[] = null as any;
   constructor(
     public props: { name: string },
     public children: [],
@@ -57,7 +71,12 @@ class User {
     onDisonnected(function happy() {
       console.log("Greeting onDisonnected!");
     });
-    return (
+
+    setTimeout(() => {
+      this.update();
+    }, 1000);
+
+    const node = (
       <>
         <div>臭哥哥{this.props.name}</div>
         <div>臭哥哥{this.props.name}</div>
@@ -65,6 +84,22 @@ class User {
         <div>臭哥哥{this.props.name}</div>
       </>
     );
+
+    this.el = [...node.childNodes] as JSX.Element[];
+
+    return node;
+  }
+
+  update() {
+    const node = <User name={`${Date().valueOf()}`}></User>;
+
+    this.el.forEach((el, index) => {
+      if (index === this.el.length - 1) {
+        (el as ChildNode).replaceWith(node);
+      } else {
+        (el as ChildNode).remove();
+      }
+    });
   }
 }
 
