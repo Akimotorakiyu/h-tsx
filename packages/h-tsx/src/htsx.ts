@@ -5,7 +5,7 @@ function isJSXClassComponent<P>(com: any): com is JSXClassComponent<P> {
 }
 
 export type KeyType = number | symbol | string;
-interface Ctx {
+export interface Ctx {
   provides: Record<KeyType, unknown>;
   tag: JsxFunctionComponent<unknown> | JSXClassComponent<unknown> | null;
   onResize: ((target: Element) => void)[];
@@ -72,7 +72,7 @@ export const htsx = <HTSX>{
   createElement<Tag extends keyof JSX.IntrinsicElements, P>(
     tag: Tag | JsxFunctionComponent<P> | JSXClassComponent<P>,
     props: JSX.IntrinsicElements[Tag] | P,
-    ...children: JSX.Element[]
+    ...children: (JSX.Element | string)[]
   ): JSX.Element {
     if (typeof tag === "function") {
       ctxStack.push(currentCtx!);
@@ -118,7 +118,7 @@ export const htsx = <HTSX>{
 
     return element;
   },
-  Fragment: function Fragment(props: null, children: JSX.Element[]) {
+  Fragment: function Fragment(props: null, children: (JSX.Element | string)[]) {
     const fragment = new DocumentFragment();
     children
       .map((child) => {
