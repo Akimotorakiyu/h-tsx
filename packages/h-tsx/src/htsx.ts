@@ -138,6 +138,7 @@ export const htsx = <HTSX>{
   Fragment: function Fragment(props: null, children: (JSX.Element | string)[]) {
     const fragment = new DocumentFragment();
     children
+      .flat()
       .map((child) => {
         return typeof child === "string"
           ? document.createTextNode(child)
