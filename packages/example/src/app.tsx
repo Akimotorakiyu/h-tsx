@@ -9,6 +9,17 @@ import {
   createElementWithUpdater,
 } from "h-tsx";
 import { HappyIcon } from "./happyIcon";
+import happy from "./happy.svg";
+
+console.log("happy", happy);
+
+const _divContainer = document.createElement("div");
+function ConvertStringToDom(props: { domString: string }) {
+  _divContainer.innerHTML = props.domString;
+  const fragment = document.createDocumentFragment();
+  fragment.append(..._divContainer.childNodes);
+  return fragment;
+}
 
 const hhh = createProvideInject<string>();
 
@@ -33,6 +44,7 @@ function Greeting(
         style={{ minWidth: "200px" }}
       >
         {props.name + "hello wrold" + msg + greeting + `${Date().valueOf()}`}
+        <ConvertStringToDom domString={happy}></ConvertStringToDom>
       </div>
     );
   });

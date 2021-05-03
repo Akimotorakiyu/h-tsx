@@ -8,5 +8,5 @@
     "jsxFactory": "htsx.createElement",
     "jsxFragmentFactory": "htsx.Fragment"
   },
-  "files": ["./src/index.ts"]
+  "include": ["./src/*"]
 }
